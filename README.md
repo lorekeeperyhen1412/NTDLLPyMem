@@ -10,7 +10,7 @@
 Pymem
 =====
 
-A python library to manipulate Windows processes
+A python library to manipulate Windows processes. Edited by Yhen to use NTDLL.
 
 Installation
 ============
