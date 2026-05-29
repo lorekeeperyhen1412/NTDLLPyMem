@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "Pymem"
+name = "NTMem"
 version = "1.14.0"
-description = "python memory access made easy"
-authors = ["Fabien Reboia <srounet@gmail.com>"]
+description = "Python Memory (this is just a fork of PyMem) but we use NTDLL Functions!"
+authors = ["LuauYhen <luauyhen@gmail.com>"]
 license = "MIT"
 readme = "PYPI-README.md"
 classifiers=[
@@ -15,7 +15,7 @@ classifiers=[
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
 ]
-repository = "https://github.com/srounet/Pymem"
+repository = "https://github.com/lorekeeperyhen1412/NTDLLPyMem"
 documentation = "https://pymem.readthedocs.io/en/latest/"
 
 [tool.poetry.dependencies]
