@@ -1,10 +1,67 @@
 import ctypes
+from ctypes import wintypes
 import struct
 
 import pymem.exception
 import pymem.ressources.kernel32
 import pymem.ressources.structure
 
+ntdll = ctypes.WinDLL("ntdll.dll")
+NTSTATUS = wintypes.LONG
+
+NtReadVirtualMemory = ntdll.NtReadVirtualMemory
+NtReadVirtualMemory.argtypes = [
+    wintypes.HANDLE,
+    wintypes.LPVOID,
+    wintypes.LPVOID,
+    wintypes.ULONG,
+    ctypes.POINTER(wintypes.ULONG)
+]
+NtReadVirtualMemory.restype = NTSTATUS
+
+NtWriteVirtualMemory = ntdll.NtWriteVirtualMemory
+NtWriteVirtualMemory.argtypes = [
+    wintypes.HANDLE,
+    wintypes.LPVOID,
+    wintypes.LPCVOID,
+    wintypes.ULONG,
+    ctypes.POINTER(wintypes.ULONG)
+]
+NtWriteVirtualMemory.restype = NTSTATUS
+
+RtlNtStatusToDosError = ntdll.RtlNtStatusToDosError
+RtlNtStatusToDosError.argtypes = [NTSTATUS]
+RtlNtStatusToDosError.restype = wintypes.ULONG
+
+FormatMessageW = kernel32.FormatMessageW
+FormatMessageW.argtypes = [
+    wintypes.DWORD,
+    wintypes.LPCVOID,
+    wintypes.DWORD,
+    wintypes.DWORD,
+    wintypes.LPWSTR,
+    wintypes.DWORD,
+    wintypes.LPVOID
+]
+FormatMessageW.restype = wintypes.DWORD
+
+FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x00000100
+FORMAT_MESSAGE_FROM_SYSTEM     = 0x00001000
+FORMAT_MESSAGE_IGNORE_INSERTS  = 0x00000200
+
+def geterr(status):
+    dos_error = RtlNtStatusToDosError(status)
+    buf = ctypes.c_wchar_p()
+    FormatMessageW(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+        None,
+        dos_error,
+        0,
+        ctypes.byref(buf),
+        0,
+        None
+    )
+    return buf.value.strip() if buf.value else f"Unknown error (NTSTATUS {hex(status)})"
 
 def allocate_memory(handle, size, allocation_type=None, protection_type=None):
     """Reserves or commits a region of memory within the virtual address space of a specified process.
@@ -135,7 +192,7 @@ def read_ctype(handle, address, ctype, *, get_py_value=True, raw_bytes=False):
 
     pymem.ressources.kernel32.SetLastError(0)
 
-    result = pymem.ressources.kernel32.ReadProcessMemory(
+    result = NtReadVirtualMemory(
         handle,
         ctypes.c_void_p(address),
         ctypes.byref(ctype),
@@ -143,8 +200,8 @@ def read_ctype(handle, address, ctype, *, get_py_value=True, raw_bytes=False):
         None,
     )
 
-    if result == 0:
-        error_code = ctypes.windll.kernel32.GetLastError()
+    if result != 0:
+        error_code = geterr(result)
         raise pymem.exception.WinAPIError(error_code)
 
     if get_py_value:
@@ -638,7 +695,7 @@ def write_ctype(handle, address, ctype):
     """
     pymem.ressources.kernel32.SetLastError(0)
 
-    result = pymem.ressources.kernel32.WriteProcessMemory(
+    result = NtWriteProcessMemory(
         handle,
         ctypes.cast(address, ctypes.c_void_p),
         ctypes.cast(ctypes.byref(ctype), ctypes.c_void_p),
@@ -646,8 +703,8 @@ def write_ctype(handle, address, ctype):
         None
     )
 
-    if result == 0:
-        error_code = ctypes.windll.kernel32.GetLastError()
+    if result != 0:
+        error_code = geterr(result)
         raise pymem.exception.WinAPIError(error_code)
 
     # TODO: remove in next breaking change
