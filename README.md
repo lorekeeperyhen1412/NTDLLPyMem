@@ -12,6 +12,9 @@ Pymem
 
 A python library to manipulate Windows processes. Edited by Yhen to use NTDLL.
 
+I replaced
+``ReadProcessMemory`` into ``NtReadVirtualMemory`` and ``WriteProcessMemory`` into ``NtWriteVirtualMemory``!
+
 Installation
 ============
 ```sh
