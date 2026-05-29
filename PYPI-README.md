@@ -1,5 +1,4 @@
-[![GitHub license](https://img.shields.io/github/license/srounet/pymem.svg)](https://github.com/lorekeeperyhen1412/Pymem)
-[![Build status](https://ci.appveyor.com/api/projects/status/sfdvrtuh9qa2f3aa/branch/master?svg=true)](https://ci.appveyor.com/project/srounet/pymem/branch/master)
+[![GitHub license](https://img.shields.io/github/license/srounet/pymem.svg)](https://github.com/lorekeeperyhen1412/NTDLLPyMem/blob/master/LICENSE)
 
 NTMem
 =====
