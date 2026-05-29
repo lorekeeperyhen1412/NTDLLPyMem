@@ -5,7 +5,7 @@ class WinAPIError(Exception):
         super(WinAPIError, self).__init__(message)
 
 
-class PymemError(Exception):
+class ntmemError(Exception):
     def __init__(self, message):
         super(PymemError, self).__init__(message)
 
@@ -27,7 +27,7 @@ class CouldNotOpenProcess(ProcessError):
         super(CouldNotOpenProcess, self).__init__(message)
 
 
-class PymemMemoryError(PymemError):
+class ntmemMemoryError(PymemError):
     def __init__(self, message):
         super(PymemMemoryError, self).__init__(message)
 
@@ -48,11 +48,11 @@ class MemoryWriteError(PymemMemoryError):
         super(MemoryWriteError, self).__init__(message)
 
 
-class PymemAlignmentError(PymemError):
+class ntmemAlignmentError(PymemError):
     def __init__(self, message):
         super(PymemAlignmentError, self).__init__(message)
 
 
-class PymemTypeError(PymemError):
+class ntmemTypeError(PymemError):
     def __init__(self, message):
         super(PymemTypeError, self).__init__(message)
