@@ -5,12 +5,12 @@ class WinAPIError(Exception):
         super(WinAPIError, self).__init__(message)
 
 
-class ntmemError(Exception):
+class NtMemError(Exception):
     def __init__(self, message):
-        super(PymemError, self).__init__(message)
+        super(NtMemError, self).__init__(message)
 
 
-class ProcessError(PymemError):
+class ProcessError(NtMemError):
     def __init__(self, message):
         super(ProcessError, self).__init__(message)
 
@@ -27,12 +27,12 @@ class CouldNotOpenProcess(ProcessError):
         super(CouldNotOpenProcess, self).__init__(message)
 
 
-class ntmemMemoryError(PymemError):
+class NtMemMemoryError(NtMemError):
     def __init__(self, message):
-        super(PymemMemoryError, self).__init__(message)
+        super(NtMemMemoryError, self).__init__(message)
 
 
-class MemoryReadError(PymemMemoryError):
+class MemoryReadError(NtMemMemoryError):
     def __init__(self, address, length, error_code=None):
         message = 'Could not read memory at: {}, length: {}'.format(address, length)
         if error_code:
@@ -40,7 +40,7 @@ class MemoryReadError(PymemMemoryError):
         super(MemoryReadError, self).__init__(message)
 
 
-class MemoryWriteError(PymemMemoryError):
+class MemoryWriteError(NtMemMemoryError):
     def __init__(self, address, value, error_code=None):
         message = 'Could not write memory at: {}, length: {}'.format(address, value)
         if error_code:
@@ -48,11 +48,11 @@ class MemoryWriteError(PymemMemoryError):
         super(MemoryWriteError, self).__init__(message)
 
 
-class ntmemAlignmentError(PymemError):
+class NtMemAlignmentError(NtMemError):
     def __init__(self, message):
-        super(PymemAlignmentError, self).__init__(message)
+        super(NtMemAlignmentError, self).__init__(message)
 
 
-class ntmemTypeError(PymemError):
+class NtMemTypeError(NtMemError):
     def __init__(self, message):
-        super(PymemTypeError, self).__init__(message)
+        super(NtMemTypeError, self).__init__(message)
