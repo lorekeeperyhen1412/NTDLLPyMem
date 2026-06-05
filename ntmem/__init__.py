@@ -132,7 +132,7 @@ class Open(object):
         python_version = "python{0}{1}.dll".format(sys.version_info.major, sys.version_info.minor)
         python_lib = ntmem.process.get_python_dll(python_version)
         if not python_lib:
-            raise ntmem.exception.ntmemError('Could not find python library')
+            raise ntmem.exception.NtMemError('Could not find python library')
 
         # Find or inject python module
         python_module = ntmem.process.module_from_name(self.process_handle, python_version)
@@ -141,7 +141,7 @@ class Open(object):
         else:
             python_lib_h = ntmem.process.inject_dll_from_path(self.process_handle, python_lib)
             if not python_lib_h:
-                raise ntmem.exception.ntmemError('Inject dll failed')
+                raise ntmem.exception.NtMemError('Inject dll failed')
 
         local_handle = ntmem.ressources.kernel32.GetModuleHandleW(python_version)
         py_initialize_ex = (
@@ -155,9 +155,9 @@ class Open(object):
             )
         )
         if not py_initialize_ex:
-            raise ntmem.exception.ntmemError('Empty py_initialize_ex')
+            raise ntmem.exception.NtMemError('Empty py_initialize_ex')
         if not self.py_run_simple_string:
-            raise ntmem.exception.ntmemError('Empty py_run_simple_string')
+            raise ntmem.exception.NtMemError('Empty py_run_simple_string')
 
         param_addr = self.allocate(4)
         self.write_int(param_addr, initsigs)
