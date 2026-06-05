@@ -6,6 +6,8 @@ import pymem.exception
 import pymem.ressources.kernel32
 import pymem.ressources.structure
 
+kernel32 = ctypes.WinDLL("kernel32.dll")
+
 ntdll = ctypes.WinDLL("ntdll.dll")
 NTSTATUS = wintypes.LONG
 
